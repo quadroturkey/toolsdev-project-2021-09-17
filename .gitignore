@@ -17,7 +17,5 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-# Environment Variables
-secrets.yml
 
 /vendor/cache
