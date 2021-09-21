@@ -32,6 +32,13 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+
+# gems I've added
+gem 'highstock-rails'
+gem 'highcharts-rails'
+gem 'rest-client'
+gem 'json'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

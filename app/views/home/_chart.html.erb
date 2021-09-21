@@ -1,0 +1,53 @@
+<div id="chart"></div>
+
+<style>
+
+    #chart {
+        width: 100%;
+        height: 400px;
+    }
+
+</style>
+
+<script>
+
+    async function chartData(data) {
+        
+        Highcharts.stockChart('chart', {
+
+            rangeSelector: {
+                selected: 1
+            },
+
+            title: {
+                text: 'Austin Weather'
+            },
+
+            exporting: {
+                enabled: false
+            },
+
+            series: [{data}]
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        $.ajax({
+            url: '/tempatures.json',
+            type: 'GET',
+            async: true,
+            success: function (data) {
+                console.log("data: ", data)
+                chartData(data);
+            },
+            error: function (error) {
+                console.log('there was an error: ', error)
+            }
+        })
+
+
+    });
+
+</script>

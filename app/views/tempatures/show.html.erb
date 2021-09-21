@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @tempature.date %>
+</p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @tempature.time %>
+</p>
+
+<p>
+  <strong>Temp:</strong>
+  <%= @tempature.temp %>
+</p>
+
+<%= link_to 'Edit', edit_tempature_path(@tempature) %> |
+<%= link_to 'Back', tempatures_path %>

@@ -1,0 +1,32 @@
+<%= form_with(model: tempature, local: true) do |form| %>
+  <% if tempature.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(tempature.errors.count, "error") %> prohibited this tempature from being saved:</h2>
+
+      <ul>
+      <% tempature.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.date_select :date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :time %>
+    <%= form.number_field :time %>
+  </div>
+
+  <div class="field">
+    <%= form.label :temp %>
+    <%= form.number_field :temp %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
