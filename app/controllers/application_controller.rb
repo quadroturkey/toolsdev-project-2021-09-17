@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
   end 
 
   def create_new_condition(params)
-
     @condition = Condition.new(params)
     @condition.save
     return @condition

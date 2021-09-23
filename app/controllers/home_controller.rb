@@ -9,11 +9,9 @@ class HomeController < ApplicationController
 
     ww_uri = self.build_uri(ww_url, api_variables)
     api_result = self.fetch_from_api(ww_uri)
-    puts api_result['data']['current_condition'][0]
 
     params = format_params(api_result['data']['current_condition'][0])
     response = self.create_new_condition(params)
-    puts response
   end  
 
   def format_params(params)
