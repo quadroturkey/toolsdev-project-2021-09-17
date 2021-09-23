@@ -7,13 +7,13 @@ class HomeController < ApplicationController
     lon = -97.849442
     api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
 
-    # Get data from world weather online
-    ww_uri = self.build_uri(ww_url, api_variables)
-    api_result = self.fetch_from_api(ww_uri)
+    # # Get data from world weather online
+    # ww_uri = self.build_uri(ww_url, api_variables)
+    # api_result = self.fetch_from_api(ww_uri)
 
-    # Store data in database
-    params = format_params(api_result['data']['current_condition'][0])
-    response = self.create_new_condition(params)
+    # # Store data in database
+    # params = format_params(api_result['data']['current_condition'][0])
+    # response = self.create_new_condition(params)
   end  
 
   def format_params(params)

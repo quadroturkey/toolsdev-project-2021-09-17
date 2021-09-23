@@ -8,9 +8,32 @@ $(document).on 'ready page:load', ->
 
     # On successful response
     result.success (res) -> appendData(wTable1, res)
+    renderChart()    
 
 # Load all conditions from database
 loadData = -> $.get '/api/conditions'
+
+# Render chart from Highcharts
+renderChart = -> 
+    Highcharts.chart 'chart-container', {
+        title: 
+            text: 'Test Title'
+        subtitle: 
+            text: 'Test Subtitle'
+        yAxis:
+            title: 
+                text: 'Temperature'
+        xAxis: 
+            title: 
+                text: 'Time'
+        plotOptions:
+            series:
+                pointStart: 30
+        series: [
+            name: 'Temperature'
+            data: [89, 90, 89, 87, 87, 88, 93, 90]
+        ]
+    }
 
 # Append all data to table
 appendData =(table, res) -> table.append res.data.map (condition) -> "<tr>
