@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'json'
 
 class HomeController < ApplicationController
   def index
@@ -10,8 +11,8 @@ class HomeController < ApplicationController
     lon = -97.849442
 
     api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
-    response = fetch_data(ww_url, api_variables)
-    puts response.body
+    res = fetch_data(ww_url, api_variables)
+    puts res['data']['request']
   end
 
   # GET method for retrieving data from an API using uri variables
@@ -22,6 +23,6 @@ class HomeController < ApplicationController
     puts api_variables_string
     
     response = Net::HTTP.get_response(URI(api_url + api_variables_string))
-    return response
+    return JSON.parse(response.body)
   end 
 end
