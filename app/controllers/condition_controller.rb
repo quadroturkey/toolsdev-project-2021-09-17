@@ -23,9 +23,7 @@ class ConditionController < ApplicationController
     # Create one new condition -- POST api/condition
     def create
         api_params = permit_params(params)
-
-        @condition = Condition.new(api_params)
-        @condition.save
+        @conditions = self.create_new_condition(api_params)
         render json: {message: 'success', data: @condition}
     end
 

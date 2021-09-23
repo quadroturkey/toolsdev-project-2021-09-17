@@ -16,4 +16,10 @@ class ApplicationController < ActionController::Base
     response = Net::HTTP.get_response(uri)
     return JSON.parse(response.body)
   end 
+
+  def create_new_condition(params)
+    @condition = Condition.new(params)
+    @condition.save
+    return @condition
+  end
 end

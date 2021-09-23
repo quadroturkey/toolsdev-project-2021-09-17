@@ -7,10 +7,10 @@ class HomeController < ApplicationController
     lon = -97.849442
     api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
 
-    ww_uri = self.build_uri(ww_url, api_variables)
-    data = self.fetch_from_api(ww_uri)
+    # ww_uri = self.build_uri(ww_url, api_variables)
+    # data = self.fetch_from_api(ww_uri)
 
-    puts data
+    # response = self.create_new_condition('test')
   end  
 
 end
