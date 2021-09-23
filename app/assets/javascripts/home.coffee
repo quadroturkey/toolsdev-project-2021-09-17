@@ -18,8 +18,6 @@ renderChart = ->
     Highcharts.chart 'chart-container', {
         title: 
             text: 'Test Title'
-        subtitle: 
-            text: 'Test Subtitle'
         yAxis:
             title: 
                 text: 'Temperature'
