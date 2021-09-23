@@ -1,6 +1,7 @@
 class ConditionController < ApplicationController
     skip_before_action :verify_authenticity_token
 
+    # Get all conditions -- GET /conditions
     def index 
         @conditions = Condition.all
         render json: {message: 'success', data: @conditions}
@@ -10,6 +11,7 @@ class ConditionController < ApplicationController
         # Read individual weather condition here
     end
 
+    # Create new condition -- POST /condition
     def create
         @condition = Condition.new(
             date_time: '09/23/2021 10:35 AM', 
@@ -35,6 +37,7 @@ class ConditionController < ApplicationController
             uv: '1'
         )
 
+        @condition.save
         render json: {message: 'success', data: @condition}
     end
 
@@ -42,7 +45,14 @@ class ConditionController < ApplicationController
         # Update weather condition here
     end
 
-    def delete
-        # Delete weather condition here
+    # Destroy condition by ID -- DELETE /condition/:id
+    def destroy
+        begin
+            @condition = Condition.find(params[:id])
+            @condition.destroy
+            render json: {message: 'success'}
+        rescue => err
+            render json: {message: "ERROR: could not destroy condition id: #{params[:id]}"}
+        end
     end
 end
