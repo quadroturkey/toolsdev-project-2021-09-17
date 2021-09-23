@@ -8,19 +8,19 @@ class ConditionController < ApplicationController
             :feels_like_c, :feels_like_f, :uv)
     end
 
-    # Get all conditions -- GET /conditions
+    # Get all conditions -- GET api/conditions
     def index 
         @conditions = Condition.all
         render json: {message: 'success', data: @conditions}
     end 
 
-    # Get one condition by id -- GET /condition/:id
+    # Get one condition by id -- GET api/condition/:id
     def show
         @condition = Condition.find(params[:id])
         render json: {message: 'success', data: @condition}
     end
 
-    # Create new condition -- POST /condition
+    # Create one new condition -- POST api/condition
     def create
         api_params = permit_params(params)
 
@@ -29,6 +29,7 @@ class ConditionController < ApplicationController
         render json: {message: 'success', data: @condition}
     end
 
+    # Update one condition -- PUT api/condition/:id
     def update
         api_params = permit_params(params)
 
@@ -36,7 +37,7 @@ class ConditionController < ApplicationController
         render json: {message: 'success', data: @condition}
     end
 
-    # Destroy one condition by ID -- DELETE /condition/:id
+    # Destroy one condition by ID -- DELETE api/condition/:id
     def destroy
         begin
             @condition = Condition.find(params[:id])
