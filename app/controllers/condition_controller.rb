@@ -44,7 +44,8 @@ class ConditionController < ApplicationController
     end
 
     def update
-        # Update weather condition here
+        @condition = Condition.update(params[:id], :temp_c => '5000')
+        render json: {message: 'success', data: @condition}
     end
 
     # Destroy one condition by ID -- DELETE /condition/:id
