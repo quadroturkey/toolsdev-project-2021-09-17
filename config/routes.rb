@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   root 'home#index'
 
-  get "/conditions", to: "condition#index"
-  post "/condition", to: "condition#create"
-  delete "/condition/:id", to: "condition#destroy"
+  get "/api/conditions", to: "condition#index"
+  get "/api/condition/:id", to: "condition#show"
+  post "/api/condition", to: "condition#create"
+  delete "/api/condition/:id", to: "condition#destroy"
 end

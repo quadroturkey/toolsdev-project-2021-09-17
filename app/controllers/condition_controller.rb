@@ -7,8 +7,10 @@ class ConditionController < ApplicationController
         render json: {message: 'success', data: @conditions}
     end 
 
+    # Get one condition by id -- GET /condition/:id
     def show
-        # Read individual weather condition here
+        @condition = Condition.find(params[:id])
+        render json: {message: 'success', data: @condition}
     end
 
     # Create new condition -- POST /condition
@@ -45,7 +47,7 @@ class ConditionController < ApplicationController
         # Update weather condition here
     end
 
-    # Destroy condition by ID -- DELETE /condition/:id
+    # Destroy one condition by ID -- DELETE /condition/:id
     def destroy
         begin
             @condition = Condition.find(params[:id])
