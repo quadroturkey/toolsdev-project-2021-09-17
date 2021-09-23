@@ -15,30 +15,12 @@ class ConditionController < ApplicationController
 
     # Create new condition -- POST /condition
     def create
-        @condition = Condition.new(
-            date_time: '09/23/2021 10:35 AM', 
-            temp_c: '24',
-            temp_f: '74',
-            weather_code: '113',
-            icon: 'http://cdn.worldweatheronline.com/images/wsymbols01_png_64/wsymbol_0001_sunny.png',
-            desc: 'Sunny',
-            windspeed_mph: '4',
-            windspeed_kmph: '6',
-            winddir_degree: '140',
-            winddir_point: 'SE',
-            precip_mm: '0.0',
-            precip_in: '0.0',
-            humidity: '33',
-            visibility: '16',
-            visibility_miles: '9',
-            pressure: '1022',
-            pressure_in: '30',
-            cloud_cover: '0',
-            feels_like_c: '25',
-            feels_like_f: '76',
-            uv: '1'
-        )
+        api_params = params.permit(:date_time, :temp_c,:temp_f, :weather_code, :icon, :desc,
+            :windspeed_mph, :windspeed_kmph, :winddir_degree, :winddir_point, :precip_mm, :precip_in,
+            :humidity, :visibility, :visibility_miles, :pressure, :pressure_in, :cloud_cover,
+            :feels_like_c, :feels_like_f, :uv)
 
+        @condition = Condition.new(api_params)
         @condition.save
         render json: {message: 'success', data: @condition}
     end
