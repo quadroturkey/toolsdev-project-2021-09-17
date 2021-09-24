@@ -7,6 +7,10 @@ class HomeController < ApplicationController
     lon = -97.849442
     api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
 
+    # Initialize and backdate data within database
+    init_result = self.init_db
+    puts init_result
+
     # # Get data from world weather online
     # ww_uri = self.build_uri(ww_url, api_variables)
     # api_result = self.fetch_from_api(ww_uri)
