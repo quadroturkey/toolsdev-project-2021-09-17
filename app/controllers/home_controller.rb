@@ -2,14 +2,17 @@ class HomeController < ApplicationController
 
   def index
     ww_key = ENV['WORLD_WEATHER_KEY']
-    ww_url = 'http://api.worldweatheronline.com/premium/v1/weather.ashx'
+    ww_url = 'http://api.worldweatheronline.com/premium/v1/past-weather.ashx'
     lat = 30.404251
     lon = -97.849442
-    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json'}
+    today = Time.now
+    past = Time.now - 2592000
+    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :date => today.strftime("%Y-%m-%d")}
 
     # Initialize Database
     @conditions = Condition.all
-    api_variables[:num_of_days] = 30 if @conditions.length <= 0
+    api_variables[:date] = past.strftime("%Y-%m-%d") if @conditions.length <= 0
+    api_variables[:enddate] = today.strftime("%Y-%m-%d") if @conditions.length <= 0
 
     # Get data from World Weather API
     ww_uri = self.build_uri(ww_url, api_variables)
@@ -30,9 +33,6 @@ class HomeController < ApplicationController
     end
 
     # params = format_params(api_result['data']['weather'])
-
-    # Backdate on empty database
-    # self.init_database(params) if @conditions.length <= 0
 
     # # Store data in database
     # response = self.create_new_condition(params)
