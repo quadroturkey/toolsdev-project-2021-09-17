@@ -19,8 +19,11 @@ class ApplicationController < ActionController::Base
 
   def backdate_database(params)
     params.each{|condition_param|
-      puts condition_param
+      puts '...initializing database'
+      create_new_condition(condition_param)
     }
+
+    puts 'database initialized'
   end
 
   def create_new_condition(params)
