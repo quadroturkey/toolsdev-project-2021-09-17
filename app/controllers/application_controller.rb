@@ -17,15 +17,10 @@ class ApplicationController < ActionController::Base
     return JSON.parse(response.body)
   end 
 
-  def init_db
-    @conditions = Condition.all
-
-    if(@conditions.length > 0)
-      return {:message => 'database initialized'}
-    else
-      # Backdate 30 days
-      return {:err => 'ERROR: database not initialized. Needs to backdate'}
-    end
+  def backdate_database(params)
+    params.each{|condition_param|
+      puts condition_param
+    }
   end
 
   def create_new_condition(params)

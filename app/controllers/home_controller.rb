@@ -5,26 +5,44 @@ class HomeController < ApplicationController
     ww_url = 'http://api.worldweatheronline.com/premium/v1/weather.ashx'
     lat = 30.404251
     lon = -97.849442
-    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
+    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json'}
 
-    # Initialize and backdate data within database
-    init_result = self.init_db
-    puts init_result
+    # Initialize Database
+    @conditions = Condition.all
+    api_variables[:num_of_days] = 30 if @conditions.length <= 0
 
-    # # Get data from world weather online
-    # ww_uri = self.build_uri(ww_url, api_variables)
-    # api_result = self.fetch_from_api(ww_uri)
+    # Get data from World Weather API
+    ww_uri = self.build_uri(ww_url, api_variables)
+    api_result = self.fetch_from_api(ww_uri)
+
+    # Update Database
+    if @conditions.length <= 0
+        init_params = []
+
+        api_result['data']['weather'].each{ |weather_date| 
+          weather_date['hourly'].each{ |weather_hour|
+            weather_hour['date'] = weather_date['date']
+            init_params.push(format_params(weather_hour))
+          }
+        }
+
+        self.backdate_database(init_params)
+    end
+
+    # params = format_params(api_result['data']['weather'])
+
+    # Backdate on empty database
+    # self.init_database(params) if @conditions.length <= 0
 
     # # Store data in database
-    # params = format_params(api_result['data']['current_condition'][0])
     # response = self.create_new_condition(params)
   end  
 
   def format_params(params)
     return {
-      :date_time => "#{Date.today.to_s} #{params['observation_time']}",
-      :temp_c => params['temp_C'],
-      :temp_f => params['temp_F'],
+      :date_time => "#{params['date']} #{params['time']}",
+      :temp_c => params['tempC'],
+      :temp_f => params['tempF'],
       :weather_code => params['weatherCode'],
       :icon => params['weatherIconUrl'][0]['value'],
       :desc => params['weatherDesc'][0]['value'],
