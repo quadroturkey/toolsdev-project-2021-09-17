@@ -1,9 +1,6 @@
 class @Chart
-    constructor: (type, data = []) ->
-        @type = type
+    constructor: (data = []) ->
         @data = data
-    
-    getType: -> @type
 
     getTitle: -> @title
     setTitle: (title) -> @title = title
