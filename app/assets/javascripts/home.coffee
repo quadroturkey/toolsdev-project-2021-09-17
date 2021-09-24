@@ -29,7 +29,7 @@ $(document).on 'ready page:load', ->
         console.log err
 
 # Load all conditions from database
-loadData = -> $.get '/api/conditionss'
+loadData = -> $.get '/api/conditions'
 
 # Render chart from Highcharts
 renderChart =(container, chartData) -> 
