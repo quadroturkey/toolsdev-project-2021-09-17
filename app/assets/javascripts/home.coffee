@@ -3,27 +3,33 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on 'ready page:load', -> 
-    result = loadData()
+    currentCondition = loadData()
 
     # On successful response
-    result.success (res) -> 
+    currentCondition.success (res) -> 
         chartData1 = 
             data: res.data.map (condition) -> Number(condition.temp_f)
             labels: 
-                title: 'Temperature (F)'
-                y: 'Temperature (F)'
+                title: 'Temperature F°'
+                dataName: 'Temperature F°'
+                y: 'Temperature F°'
                 x: 'Days'
         chartData2 = 
             data: res.data.map (condition) -> Number(condition.temp_c)
             labels: 
-                title: 'Temperature (C)'
-                y: 'Temperature (C)'
+                title: 'Temperature C°'
+                dataName: 'Temperature C°'
+                y: 'Temperature C°'
                 x: 'Days'
         renderChart 'chart-one', chartData1
         renderChart 'chart-two', chartData2
 
+    # Error response
+    currentCondition.error (err) -> 
+        console.log err
+
 # Load all conditions from database
-loadData = -> $.get '/api/conditions'
+loadData = -> $.get '/api/conditionss'
 
 # Render chart from Highcharts
 renderChart =(container, chartData) -> 
@@ -40,6 +46,6 @@ renderChart =(container, chartData) ->
             series:
                 pointStart: 30
         series: [
-            name: 'Temperature'
+            name: chartData.labels.dataName
             data: chartData.data
         ]
