@@ -13,18 +13,24 @@ $(document).on 'ready page:load', ->
     chartOne.setLabelY 'Temperature F°'
     chartOne.setLabelX 'Days'
     chartOne.setDataLabel 'Temperature F°'
+    chartOne.setInterval 10800000
 
     chartTwo = new Chart()
     chartTwo.setTitle '3-Hour Highs and Lows'
     chartTwo.setLabelY 'Temperature F°'
     chartTwo.setLabelX 'Days'
     chartTwo.setDataLabel 'Temperature F°'
+    chartTwo.setInterval 10800000
 
     # On successful response
     currentCondition.success (res) -> 
         conditionRange = filterByDateRange(res.data, '2021-09-24', '2021-09-19')
+
+        chartOne.setStartDate conditionRange[0].date_time.substring(0, 10)
+        chartTwo.setStartDate res.data[0].date_time.substring(0, 10)
+
         chartOne.setData conditionRange.map (condition) -> Number(condition.temp_f)
-        chartTwo.setData res.data.map (condition) -> Number(condition.temp_f)
+        chartTwo.setData res.data.map (condition, index) -> Number(condition.temp_f)
 
         chartOne.render 'chart-one'
         chartTwo.render 'chart-two'
