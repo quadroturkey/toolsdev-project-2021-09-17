@@ -1,28 +1,32 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+# 
+#= require chart
 
 $(document).on 'ready page:load', -> 
     currentCondition = loadData()
 
+    # Messing with chart class
+    chartOne = new Chart('test type')
+    chartTwo = new Chart('test type')
+
     # On successful response
     currentCondition.success (res) -> 
-        chartData1 = 
-            data: res.data.map (condition) -> Number(condition.temp_f)
-            labels: 
-                title: 'Temperature F°'
-                dataName: 'Temperature F°'
-                y: 'Temperature F°'
-                x: 'Days'
-        chartData2 = 
-            data: res.data.map (condition) -> Number(condition.temp_c)
-            labels: 
-                title: 'Temperature C°'
-                dataName: 'Temperature C°'
-                y: 'Temperature C°'
-                x: 'Days'
-        renderChart 'chart-one', chartData1
-        renderChart 'chart-two', chartData2
+        chartOne.setTitle 'Temperature F°'
+        chartOne.setLabelY 'Temperature F°'
+        chartOne.setLabelX 'Days'
+        chartOne.setDataLabel 'Temperature F°'
+        chartOne.setData res.data.map (condition) -> Number(condition.temp_f)
+
+        chartTwo.setTitle 'Temperature C°'
+        chartTwo.setLabelY 'Temperature C°'
+        chartTwo.setLabelX 'Days'
+        chartTwo.setDataLabel 'Temperature C°'
+        chartTwo.setData res.data.map (condition) -> Number(condition.temp_c)
+
+        chartOne.render 'chart-one'
+        chartTwo.render 'chart-two'
 
     # Error response
     currentCondition.error (err) -> 
@@ -30,22 +34,3 @@ $(document).on 'ready page:load', ->
 
 # Load all conditions from database
 loadData = -> $.get '/api/conditions'
-
-# Render chart from Highcharts
-renderChart =(container, chartData) -> 
-    Highcharts.chart container,
-        title: 
-            text: chartData.labels.title
-        yAxis:
-            title: 
-                text: chartData.labels.y
-        xAxis: 
-            title: 
-                text: chartData.labels.x
-        plotOptions:
-            series:
-                pointStart: 30
-        series: [
-            name: chartData.labels.dataName
-            data: chartData.data
-        ]
