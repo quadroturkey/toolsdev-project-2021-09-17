@@ -42,7 +42,12 @@ $(document).on 'ready page:load', ->
 # Load all conditions from database
 loadData = -> $.get '/api/conditions'
 
-filterByDateRange = (conditions, startDate, endDate) -> 
+filterByDateRange = (conditions, endDate, startDate) -> 
+    endUnix = new Date(endDate).getTime()
+    startUnix = new Date(startDate).getTime()
+
     return conditions.filter (condition) ->
-        if (condition.date_time.substring(0, 10) == startDate)
+        conditionUnix = new Date(condition.date_time.substring(0, 10)).getTime()
+
+        if (conditionUnix <= endUnix && conditionUnix > startUnix)
             return condition
