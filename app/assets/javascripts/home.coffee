@@ -24,13 +24,15 @@ $(document).on 'ready page:load', ->
 
     # On successful response
     currentCondition.success (res) -> 
-        conditionRange = filterByDateRange(res.data, '2021-09-24', '2021-09-19')
+        unixDay = 86400000
+        weekRange = filterByDateRange(res.data, Date.now() + (unixDay * 2), Date.now() - (unixDay * 6))
+        monthRange = filterByDateRange(res.data, Date.now(), Date.now() - (unixDay * 31))
 
-        chartOne.setStartDate conditionRange[0].date_time.substring(0, 10)
-        chartTwo.setStartDate res.data[0].date_time.substring(0, 10)
+        chartOne.setStartDate weekRange[0].date_time.substring(0, 10)
+        chartTwo.setStartDate monthRange[0].date_time.substring(0, 10)
 
-        chartOne.setData conditionRange.map (condition) -> Number(condition.temp_f)
-        chartTwo.setData res.data.map (condition, index) -> Number(condition.temp_f)
+        chartOne.setData weekRange.map (condition) -> Number(condition.temp_f)
+        chartTwo.setData monthRange.map (condition, index) -> Number(condition.temp_f)
 
         chartOne.render 'chart-one'
         chartTwo.render 'chart-two'
@@ -43,11 +45,9 @@ $(document).on 'ready page:load', ->
 loadData = -> $.get '/api/conditions'
 
 filterByDateRange = (conditions, endDate, startDate) -> 
-    endUnix = new Date(endDate).getTime()
-    startUnix = new Date(startDate).getTime()
-
     return conditions.filter (condition) ->
         conditionUnix = new Date(condition.date_time.substring(0, 10)).getTime()
+        console.log conditionUnix
 
-        if (conditionUnix <= endUnix && conditionUnix > startUnix)
+        if (conditionUnix <= endDate && conditionUnix > startDate)
             return condition
