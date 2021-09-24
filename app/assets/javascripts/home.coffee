@@ -7,31 +7,44 @@ $(document).on 'ready page:load', ->
     wTable1 = $ '#weather-table-1'
 
     # On successful response
-    result.success (res) -> appendData(wTable1, res)
-    renderChart()    
+    result.success (res) -> 
+        appendData wTable1, res
+        chartData1 = 
+            data: res.data.map (condition) -> Number(condition.temp_f)
+            labels: 
+                title: 'Temperature (F)'
+                y: 'Temperature (F)'
+                x: 'Days'
+        chartData2 = 
+            data: res.data.map (condition) -> Number(condition.temp_c)
+            labels: 
+                title: 'Temperature (C)'
+                y: 'Temperature (C)'
+                x: 'Days'
+        renderChart 'chart-one', chartData1
+        renderChart 'chart-two', chartData2
 
 # Load all conditions from database
 loadData = -> $.get '/api/conditions'
 
 # Render chart from Highcharts
-renderChart = -> 
-    Highcharts.chart 'chart-container', {
+renderChart =(container, chartData) -> 
+    Highcharts.chart container,
         title: 
-            text: 'Test Title'
+            text: chartData.labels.title
         yAxis:
             title: 
-                text: 'Temperature'
+                text: chartData.labels.y
         xAxis: 
             title: 
-                text: 'Time'
+                text: chartData.labels.x
         plotOptions:
             series:
                 pointStart: 30
         series: [
             name: 'Temperature'
-            data: [89, 90, 89, 87, 87, 88, 93, 90]
+            data: chartData.data
         ]
-    }
 
 # Append all data to table
 appendData =(table, res) -> table.append res.data.map (condition) -> "<tr>
