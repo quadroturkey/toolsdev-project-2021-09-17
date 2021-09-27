@@ -17,7 +17,5 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-
-/vendor/cache
-
 app_environment_variables.rb
+/vendor/cache
