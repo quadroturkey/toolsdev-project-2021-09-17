@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root 'home#index'
+
+  get "/api/conditions", to: "condition#index"
+  get "/api/condition/:id", to: "condition#show"
+  post "/api/condition", to: "condition#create"
+  put "/api/condition/:id", to: "condition#update"
+  delete "/api/condition/:id", to: "condition#destroy"
 end
