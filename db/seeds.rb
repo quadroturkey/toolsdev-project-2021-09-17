@@ -7,24 +7,29 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-# back fill 1 month of data
+# backfill 1 month of data
 
-temps = RestClient.get 'http://api.worldweatheronline.com/premium/v1/past-weather.ashx?key=c03bc70bd88145c9abc191601212009&q=30.404251,-97.849442&format=json&date=2021-09-01&enddate=2021-09-20'
+temps = RestClient.get 'http://api.worldweatheronline.com/premium/v1/past-weather.ashx?key=c03bc70bd88145c9abc191601212009&q=30.404251,-97.849442&format=json&date=2021-09-01&enddate=2021-09-22&tp=1'
 temps_array = JSON.parse(temps)["data"]["weather"]
 
 temps_array.each do |x|
   x.each do |key, value|
     if key == "date"
       $date = value
-	  end
-    if key == "hourly"
+    elsif key == "maxtempF"
+      $highTemp = value
+    elsif key == "mintempF"
+      $lowTemp = value
+    elsif key == "hourly"
       value.each do |hour|
         temp = hour["tempF"]
         time = hour["time"]
         Tempature.create(
           date: $date,
           time: time,
-          temp: temp
+          temp: temp,
+          high: $highTemp,
+          low: $lowTemp
         )
       end
     end

@@ -38,6 +38,7 @@ gem 'highstock-rails'
 gem 'highcharts-rails'
 gem 'rest-client'
 gem 'json'
+gem 'clockwork', '~> 2.0', '>= 2.0.4'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

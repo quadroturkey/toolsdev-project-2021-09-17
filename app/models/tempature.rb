@@ -1,3 +1,2 @@
 class Tempature < ApplicationRecord
-  
 end

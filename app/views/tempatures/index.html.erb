@@ -8,6 +8,8 @@
       <th>Date</th>
       <th>Time</th>
       <th>Temp</th>
+      <th>High</th>
+      <th>Low</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +20,8 @@
         <td><%= tempature.date %></td>
         <td><%= tempature.time %></td>
         <td><%= tempature.temp %></td>
+        <td><%= tempature.high %></td>
+        <td><%= tempature.low %></td>
         <td><%= link_to 'Show', tempature %></td>
         <td><%= link_to 'Edit', edit_tempature_path(tempature) %></td>
         <td><%= link_to 'Destroy', tempature, method: :delete, data: { confirm: 'Are you sure?' } %></td>

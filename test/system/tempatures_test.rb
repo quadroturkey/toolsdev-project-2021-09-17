@@ -15,6 +15,8 @@ class TempaturesTest < ApplicationSystemTestCase
     click_on "New Tempature"
 
     fill_in "Date", with: @tempature.date
+    fill_in "High", with: @tempature.high
+    fill_in "Low", with: @tempature.low
     fill_in "Temp", with: @tempature.temp
     fill_in "Time", with: @tempature.time
     click_on "Create Tempature"
@@ -28,6 +30,8 @@ class TempaturesTest < ApplicationSystemTestCase
     click_on "Edit", match: :first
 
     fill_in "Date", with: @tempature.date
+    fill_in "High", with: @tempature.high
+    fill_in "Low", with: @tempature.low
     fill_in "Temp", with: @tempature.temp
     fill_in "Time", with: @tempature.time
     click_on "Update Tempature"

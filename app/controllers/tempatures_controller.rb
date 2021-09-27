@@ -5,10 +5,6 @@ class TempaturesController < ApplicationController
   # GET /tempatures.json
   def index
     @tempatures = Tempature.all
-    
-    # respond_to do |format|
-    #   format.json { render :json => @tempatures }
-    # end
   end
 
   # GET /tempatures/1
@@ -73,6 +69,6 @@ class TempaturesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tempature_params
-      params.require(:tempature).permit(:date, :time, :temp)
+      params.require(:tempature).permit(:date, :time, :temp, :high, :low)
     end
 end

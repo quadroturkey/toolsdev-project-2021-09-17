@@ -1,11 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  date: 2021-09-20
+  date: 2021-09-22
   time: 1
   temp: 1
+  high: 1
+  low: 1
 
 two:
-  date: 2021-09-20
+  date: 2021-09-22
   time: 1
   temp: 1
+  high: 1
+  low: 1

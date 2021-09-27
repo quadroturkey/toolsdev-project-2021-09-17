@@ -1,8 +1,9 @@
-<div id="chart"></div>
+<div id="forcastActual" class="chart"></div>
+<div id="highLow" class="chart">
 
 <style>
 
-    #chart {
+    .chart {
         width: 100%;
         height: 400px;
     }
@@ -11,25 +12,99 @@
 
 <script>
 
-    async function chartData(data) {
-        
-        Highcharts.stockChart('chart', {
-
+    async function chartData(actual, forcast, highs, lows) {
+        Highcharts.stockChart('forcastActual', {
             rangeSelector: {
-                selected: 1
+                allButtonsEnabled: true,
+                buttons: [{
+                    type: 'week',
+                    count: 1,
+                    text: '1W',
+                    title: 'View 1 Week'
+                }, {
+                    type: 'week',
+                    count: 2,
+                    text: '2W',
+                    title: 'View 2 Weeks'
+                }, {
+                    type: 'all',
+                    text: 'All',
+                    title: 'View all'
+                }],
+                buttonTheme: {
+                    width: 60
+                },
+                selected: 2
             },
-
+            legend: {
+                enabled: true
+            },
+            chart: {
+                type: "line"
+            },
             title: {
                 text: 'Austin Weather'
             },
-
-            exporting: {
-                enabled: false
+            xAxis: {
+                title: {
+                    text: "date"
+                },
+                categories: ["actual", "forcasat"]
             },
-
-            series: [{data}]
+            series: [{
+                data: actual,
+                name: "actual"
+            }, {
+                data: forcast,
+                name: "forcasat"
+            }]
         });
-
+        Highcharts.stockChart('highLow', {
+            rangeSelector: {
+                allButtonsEnabled: true,
+                buttons: [{
+                    type: 'week',
+                    count: 1,
+                    text: '1W',
+                    title: 'View 1 Week'
+                }, {
+                    type: 'week',
+                    count: 2,
+                    text: '2W',
+                    title: 'View 2 Weeks'
+                }, {
+                    type: 'all',
+                    text: 'All',
+                    title: 'View all'
+                }],
+                buttonTheme: {
+                    width: 60
+                },
+                selected: 2
+            },
+            legend: {
+                enabled: true
+            },
+            chart: {
+                type: "line"
+            },
+            title: {
+                text: 'highs and lows'
+            },
+            xAxis: {
+                title: {
+                    text: "date"
+                },
+                categories: ["high", "lows"]
+            },
+            series: [{
+                data: highs,
+                name: "Highs"
+            }, {
+                data: lows,
+                name: "Lows"
+            }]
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -40,7 +115,40 @@
             async: true,
             success: function (data) {
                 console.log("data: ", data)
-                chartData(data);
+                const actual = [];
+                const forcast = [];
+                const highs = [];
+                const lows = [];
+                data.forEach(hash => {
+                    let year = hash.date.split('-')[0]
+                    let month = hash.date.split('-')[1]
+                    month = parseInt(month, 10)
+                    month -=1
+                    // console.log('month: ', month)
+                    let day = hash.date.split('-')[2]
+                    let hours = (hash.time / 100)
+                    let date = new Date(year, month, day, hours, 0, 0, 0)
+                    let seconds = date.getTime()
+
+                    let now = new Date()
+                    now = now.getTime()
+
+                    if (hours % 3 == 0) {
+                        highs.push([seconds, hash.high])
+                        lows.push([seconds, hash.low]) 
+                    }
+
+
+                    if (date < now) {
+                        actual.push([seconds, hash.temp])
+                    } else {
+                        forcast.push([seconds, hash.temp])
+                    }
+
+
+                })
+                // console.log('points: ', points)
+                chartData(actual, forcast, highs, lows);
             },
             error: function (error) {
                 console.log('there was an error: ', error)

@@ -17,7 +17,7 @@ class TempaturesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create tempature" do
     assert_difference('Tempature.count') do
-      post tempatures_url, params: { tempature: { date: @tempature.date, temp: @tempature.temp, time: @tempature.time } }
+      post tempatures_url, params: { tempature: { date: @tempature.date, high: @tempature.high, low: @tempature.low, temp: @tempature.temp, time: @tempature.time } }
     end
 
     assert_redirected_to tempature_url(Tempature.last)
@@ -34,7 +34,7 @@ class TempaturesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update tempature" do
-    patch tempature_url(@tempature), params: { tempature: { date: @tempature.date, temp: @tempature.temp, time: @tempature.time } }
+    patch tempature_url(@tempature), params: { tempature: { date: @tempature.date, high: @tempature.high, low: @tempature.low, temp: @tempature.temp, time: @tempature.time } }
     assert_redirected_to tempature_url(@tempature)
   end
 

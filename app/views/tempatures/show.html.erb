@@ -15,5 +15,15 @@
   <%= @tempature.temp %>
 </p>
 
+<p>
+  <strong>High:</strong>
+  <%= @tempature.high %>
+</p>
+
+<p>
+  <strong>Low:</strong>
+  <%= @tempature.low %>
+</p>
+
 <%= link_to 'Edit', edit_tempature_path(@tempature) %> |
 <%= link_to 'Back', tempatures_path %>
