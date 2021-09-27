@@ -2,25 +2,47 @@ class HomeController < ApplicationController
 
   def index
     ww_key = ENV['WORLD_WEATHER_KEY']
-    ww_url = 'http://api.worldweatheronline.com/premium/v1/weather.ashx'
+    ww_url = 'http://api.worldweatheronline.com/premium/v1/past-weather.ashx'
     lat = 30.404251
     lon = -97.849442
-    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :num_of_days => '5'}
+    today = Time.now
+    past = Time.now - 2592000
+    api_variables = {:key => ww_key, :q => "#{lat},#{lon}", :format => 'json', :date => today.strftime("%Y-%m-%d")}
 
-    # Get data from world weather online
+    # Initialize Database
+    @conditions = Condition.all
+    api_variables[:date] = past.strftime("%Y-%m-%d") if @conditions.length <= 0
+    api_variables[:enddate] = today.strftime("%Y-%m-%d") if @conditions.length <= 0
+
+    # Get data from World Weather API
     ww_uri = self.build_uri(ww_url, api_variables)
     api_result = self.fetch_from_api(ww_uri)
 
-    # Store data in database
-    params = format_params(api_result['data']['current_condition'][0])
-    response = self.create_new_condition(params)
+    # Update Database
+    if @conditions.length <= 0
+        init_params = []
+
+        api_result['data']['weather'].each{ |weather_date| 
+          weather_date['hourly'].each{ |weather_hour|
+            weather_hour['date'] = weather_date['date']
+            init_params.push(format_params(weather_hour))
+          }
+        }
+
+        self.backdate_database(init_params)
+    end
+
+    # params = format_params(api_result['data']['weather'])
+
+    # # Store data in database
+    # response = self.create_new_condition(params)
   end  
 
   def format_params(params)
     return {
-      :date_time => "#{Date.today.to_s} #{params['observation_time']}",
-      :temp_c => params['temp_C'],
-      :temp_f => params['temp_F'],
+      :date_time => "#{params['date']} #{params['time']}",
+      :temp_c => params['tempC'],
+      :temp_f => params['tempF'],
       :weather_code => params['weatherCode'],
       :icon => params['weatherIconUrl'][0]['value'],
       :desc => params['weatherDesc'][0]['value'],

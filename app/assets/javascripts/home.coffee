@@ -1,39 +1,53 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
+# 
+#= require chart
 
 $(document).on 'ready page:load', -> 
-    result = loadData()
-    wTable1 = $ '#weather-table-1'
+    currentCondition = loadData()
+
+    # Set up charts
+    chartOne = new Chart()
+    chartOne.setTitle 'Current Week + Forecast'
+    chartOne.setLabelY 'Temperature F°'
+    chartOne.setLabelX 'Days'
+    chartOne.setDataLabel 'Temperature F°'
+    chartOne.setInterval 10800000
+
+    chartTwo = new Chart()
+    chartTwo.setTitle '30 Day Highs and Lows'
+    chartTwo.setLabelY 'Temperature F°'
+    chartTwo.setLabelX 'Days'
+    chartTwo.setDataLabel 'Temperature F°'
+    chartTwo.setInterval 10800000
 
     # On successful response
-    result.success (res) -> appendData(wTable1, res)
+    currentCondition.success (res) -> 
+        unixDay = 86400000
+        weekRange = filterByDateRange(res.data, Date.now() + (unixDay * 2), Date.now() - (unixDay * 6))
+        monthRange = filterByDateRange(res.data, Date.now(), Date.now() - (unixDay * 31))
+
+        chartOne.setStartDate weekRange[0].date_time.substring(0, 10)
+        chartTwo.setStartDate monthRange[0].date_time.substring(0, 10)
+
+        chartOne.setData weekRange.map (condition) -> Number(condition.temp_f)
+        chartTwo.setData monthRange.map (condition, index) -> Number(condition.temp_f)
+
+        chartOne.render 'chart-one'
+        chartTwo.render 'chart-two'
+
+    # Error response
+    currentCondition.error (err) -> 
+        console.log err
 
 # Load all conditions from database
 loadData = -> $.get '/api/conditions'
 
-# Append all data to table
-appendData =(table, res) -> table.append res.data.map (condition) -> "<tr>
-                <td>#{condition.id}</td>
-                <td>#{condition.date_time}</td>
-                <td>#{condition.temp_c}</td>
-                <td>#{condition.temp_f}</td>
-                <td>#{condition.weather_code}</td>
-                <td>#{condition.icon}</td>
-                <td>#{condition.desc}</td>
-                <td>#{condition.windspeed_mph}</td>
-                <td>#{condition.windspeed_kmph}</td>
-                <td>#{condition.winddir_degree}</td>
-                <td>#{condition.winddir_point}</td>
-                <td>#{condition.precip_mm}</td>
-                <td>#{condition.precip_in}</td>
-                <td>#{condition.humidity}</td>
-                <td>#{condition.visibility}</td>
-                <td>#{condition.visibility_miles}</td>
-                <td>#{condition.pressure}</td>
-                <td>#{condition.pressure_in}</td>
-                <td>#{condition.cloud_cover}</td>
-                <td>#{condition.feels_like_c}</td>
-                <td>#{condition.feels_like_f}</td>
-                <td>#{condition.uv}</td>
-            </tr>"
+filterByDateRange = (conditions, endDate, startDate) -> 
+    return conditions.filter (condition) ->
+        conditionUnix = new Date(condition.date_time.substring(0, 10)).getTime()
+        console.log conditionUnix
+
+        if (conditionUnix <= endDate && conditionUnix > startDate)
+            return condition

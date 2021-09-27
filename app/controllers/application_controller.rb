@@ -11,12 +11,22 @@ class ApplicationController < ActionController::Base
     return URI("#{api_url}?#{variable_str}")
   end
 
-  # Fetch data from an API using uri variables
   def fetch_from_api(uri)    
     response = Net::HTTP.get_response(uri)
     return JSON.parse(response.body)
   end 
 
+  # Save conditions to database for all backdated parameters
+  def backdate_database(params)
+    params.each{|condition_param|
+      puts '...initializing database'
+      create_new_condition(condition_param)
+    }
+
+    puts 'database initialized'
+  end
+
+  # Save individual condition to database
   def create_new_condition(params)
     @condition = Condition.new(params)
     @condition.save
