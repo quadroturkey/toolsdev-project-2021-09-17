@@ -19,3 +19,5 @@
 
 
 /vendor/cache
+
+app_environment_variables.rb
