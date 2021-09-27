@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_09_23_025731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "conditions", force: :cascade do |t|
+    t.string "date_time"
+    t.string "temp_c"
+    t.string "temp_f"
+    t.string "weather_code"
+    t.string "icon"
+    t.string "desc"
+    t.string "windspeed_mph"
+    t.string "windspeed_kmph"
+    t.string "winddir_degree"
+    t.string "winddir_point"
+    t.string "precip_mm"
+    t.string "precip_in"
+    t.string "humidity"
+    t.string "visibility"
+    t.string "visibility_miles"
+    t.string "pressure"
+    t.string "pressure_in"
+    t.string "cloud_cover"
+    t.string "feels_like_c"
+    t.string "feels_like_f"
+    t.string "uv"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
