@@ -16,7 +16,7 @@ $(document).on 'ready page:load', ->
     chartOne.setInterval 10800000
 
     chartTwo = new Chart()
-    chartTwo.setTitle '3-Hour Highs and Lows'
+    chartTwo.setTitle '30 Day Highs and Lows'
     chartTwo.setLabelY 'Temperature F°'
     chartTwo.setLabelX 'Days'
     chartTwo.setDataLabel 'Temperature F°'
